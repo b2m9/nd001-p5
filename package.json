@@ -6,7 +6,7 @@
   "scripts": {
     "copy": "npm run copy:bootstrap && npm run copy:leaflet && npm run copy:knockout",
     "copy:bootstrap": "mkdir -p libs/bootstrap; mv -t libs/bootstrap node_modules/bootstrap/dist/css/bootstrap.*css",
-    "copy:leaflet": "mkdir -p libs/leaflet;mv -t libs/leaflet node_modules/leaflet/dist/leaflet*",
+    "copy:leaflet": "mkdir -p libs/leaflet;mv -t libs/leaflet node_modules/leaflet/dist/*",
     "copy:knockout": "mkdir -p libs/knockout; mv -t libs/knockout node_modules/knockout/build/output/knockout*",
     "postinstall": "npm run copy"
   },
