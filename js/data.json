@@ -1,0 +1,17 @@
+[{
+    "name": "Gili Air",
+    "coords": [-8.358920, 116.081096],
+    "tags": ["Indonesia", "Island", "Beach", "Ocean", "Asia"]
+}, {
+    "name": "Yushan",
+    "coords": [23.469920, 120.957712],
+    "tags": ["Jade Mountain", "Taiwan", "Island", "Mountain", "Trekking", "Hiking", "Asia"]
+}, {
+    "name": "Auroville",
+    "coords": [12.004899, 79.811725],
+    "tags": ["India", "Tamil Nadu", "Asia", "Town", "Spirituality", "Yoga", "Meditation"]
+}, {
+    "name": "Cap Le Grand",
+    "coords": [-34.002967, 122.114987],
+    "tags": ["Australia", "Western Australia", "National Park", "Beach", "Crystal Blue Water", "Ocean"]
+}]

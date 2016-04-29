@@ -1,40 +1,75 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Top 10</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>Clickbait: Top 10 Places You Should Visit Before You Die</title>
         <link rel="stylesheet" href="css/style.css" type="text/css" />
         <link rel="stylesheet" href="libs/leaflet/leaflet.css" type="text/css" />
+        
+        
         <script type="text/javascript" src="libs/leaflet/leaflet-src.js"></script>
+        <!--<script type="text/javascript" src="libs/leaflet/leaflet.js"></script>-->
+        <script type="text/javascript" src="libs/knockout/knockout-latest.debug.js"></script>
+        <!--<script type="text/javascript" src="libs/knockout/knockout-latest.js"></script>-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+        <!--<script type="text/javascript" src="libs/jquery/jquery-custom.min.js"></script>-->
     </head>
     <body>
-        <div id="map" style="height:100%">
-            
+        <div id="sidebar" class="sidebar">
+                <input id="search" type="text" value="Type here">
+                <button data-bind="click: filter">Filter</button>
+                <p>Results</p>
+                <ul data-bind="foreach: places">
+                    <li data-bind="text: name, style: { 'display': display }"></li>
+                </ul>
         </div>
+        <div class="wrapper">
+            <div class="navigation">
+                <div class="navigation--tagline">Your Next Holiday</div>
+                <div id="menu-toggle" class="navigation--menu" data-bind="click: toggle"><span>Menu</span></div>
+            </div>
+            <div id="map-container" class="map"></div>
+        </div>
+        
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                var mymap = L.map('map').setView([0,0], 2);
-                L.tileLayer("http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg").addTo(mymap);
+            // document.addEventListener("DOMContentLoaded", function () {
+            //     var mymap = L.map('map').setView([0,0], 2);
+            //     L.tileLayer("http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg").addTo(mymap);
                 
-                // Gili Air
-                L.marker([-8.358920, 116.081096]).addTo(mymap);
-                // Yushan
-                L.marker([23.469920, 120.957712]).addTo(mymap);
-                // Auroville
-                L.marker([12.004899, 79.811725]).addTo(mymap);
-                // Cap Le Grand
-                L.marker([-34.002967, 122.114987]).addTo(mymap);
-                // Tuolumne Meadows
-                L.marker([37.876874, -119.375941]).addTo(mymap);
-                // Lake Myvatn
-                L.marker([65.636640, -16.985774]).addTo(mymap);
-                // North Cape
-                L.marker([71.170899, 25.782512]).addTo(mymap);
-                // Chefchaouen
-                L.marker([35.168447, -5.269350]).addTo(mymap);
-                // Lastres
-                L.marker([43.514356, -5.270263]).addTo(mymap);
-                // Iles des Saintes
-                L.marker([15.855028, -61.628413]).addTo(mymap);
+            //     // Gili Air
+            //     // L.marker([-8.358920, 116.081096]).addTo(mymap);
+            //     // Yushan
+            //     // L.marker([23.469920, 120.957712]).addTo(mymap);
+            //     // Auroville
+            //     // L.marker([12.004899, 79.811725]).addTo(mymap);
+            //     // Cap Le Grand
+            //     // L.marker([-34.002967, 122.114987]).addTo(mymap);
+            //     // Tuolumne Meadows
+            //     // L.marker([37.876874, -119.375941]).addTo(mymap);
+            //     // Lake Myvatn
+            //     L.marker([65.636640, -16.985774]).addTo(mymap);
+            //     // North Cape
+            //     L.marker([71.170899, 25.782512]).addTo(mymap);
+            //     // Chefchaouen
+            //     L.marker([35.168447, -5.269350]).addTo(mymap);
+            //     // Lastres
+            //     L.marker([43.514356, -5.270263]).addTo(mymap);
+            //     // Iles des Saintes
+            //     L.marker([15.855028, -61.628413]).addTo(mymap);
+            // });
+        </script>
+        <!-- TODO: add proper loading, beware of dependencies! -->
+        <script type="text/javascript" src="js/Map.js"></script>
+        <script type="text/javascript" src="js/Place.js"></script>
+        <script type="text/javascript" src="js/DataLoader.js"></script>
+        <script type="text/javascript" src="js/DefaultViewModel.js"></script>
+        <script>
+            jQuery(document).ready(function () {
+                app.Map.init();
+                app.DefaultViewModel.init();
+                ko.applyBindings(app.DefaultViewModel);
             });
         </script>
     </body>
