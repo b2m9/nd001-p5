@@ -13,8 +13,6 @@ app.DataLoader = (function ($, ko) {
                 data = typeof data === "string" ? ko.utils.parseJson()(data) : data;
                 cb(data);
             });
-        } else {
-            //TODO: well... what?
         }
     }
     

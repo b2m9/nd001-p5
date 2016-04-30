@@ -6,8 +6,9 @@ app.DefaultViewModel = (function ($, ko, db, map) {
     var me = {
         places: ko.observableArray([]),
         init: _init,
+        toggle: _toggle,
         filter: _filter,
-        toggle: _toggle
+        select: _select
     };
     
     function _init () {
@@ -25,13 +26,10 @@ app.DefaultViewModel = (function ($, ko, db, map) {
                 var coords = [parseFloat(d.coords[0] || 0), parseFloat(d.coords[1] || 0)];
                 
                 arr.push(new app.Place(d.name, coords, d.tags));
-                markers.push(coords);
             });
             
             // populate only once to avoid Knockout triggering update
             me.places(arr);
-            // push new markers to map
-            map.updateMarkers(markers);
         });
     }
     
@@ -42,19 +40,20 @@ app.DefaultViewModel = (function ($, ko, db, map) {
     function _filter () {
         var s = $("#search").val().trim();
         var re = new RegExp(s, "gi");
-        var markers = [];
         
         ko.utils.arrayForEach(me.places(), function (place, i) {
             if (place.tags().join().concat(place.name()).search(re) > -1) {
                 place.display("block");
-                markers.push([place.lat(), place.lng()]);
+                place.marker.setOpacity(1);
             } else {
                 place.display("none");
+                place.marker.setOpacity(0);
             }
         });
-        
-        // TODO: do something with markers
-        map.updateMarkers(markers);
+    }
+    
+    function _select (el) {
+        this.marker.fireEvent("click");
     }
     
     return me;

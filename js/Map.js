@@ -1,6 +1,6 @@
 var app = window.app || {};
 
-app.Map = (function ($, maplib) {
+app.Map = (function ($, L) {
     "use strict";
     
     // TODO: attribution
@@ -11,8 +11,9 @@ app.Map = (function ($, maplib) {
         zoom: 2,
         tiles: "http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg",
         markers: [],
-        markerLayerGroup: maplib.layerGroup(),
+        markerLayerGroup: L.layerGroup(),
         init: _init,
+        createMarker: _createMarker,
         updateMarkers: _updateMarkers
     };
     
@@ -20,10 +21,33 @@ app.Map = (function ($, maplib) {
         var map = me.map;
         
         // create map pane
-        map = maplib.map(me.id).setView(me.origin, me.zoom);
+        map = L.map(me.id).setView(me.origin, me.zoom);
         // connect to tile server
-        maplib.tileLayer(me.tiles).addTo(map);
+        L.tileLayer(me.tiles).addTo(map);
+        // add layer group
         me.markerLayerGroup.addTo(map);
+        // add event listeners to remove marker animation
+        $("#" + me.id).on("animationend", "img.leaflet-marker-icon", _animationEnd);
+        $("#" + me.id).on("animationend", "img.leaflet-marker-shadow", _animationEnd);
+    }
+    
+    function _animationEnd () {
+        $(this).removeClass("bounce");
+    }
+    
+    function _createMarker (coords) {
+        var marker = L.marker([coords[0] || 0, coords[1] || 0]);
+        
+        marker.on("click", function (ev) {
+            var img = $(ev.target._icon);
+            var shadow = $(ev.target._shadow);
+            
+            img.addClass("bounce");
+            shadow.addClass("bounce");
+        });
+        
+        me.markerLayerGroup.addLayer(marker);
+        return marker;
     }
     
     function _updateMarkers (coords) {
@@ -42,41 +66,13 @@ app.Map = (function ($, maplib) {
         
         if ($.isArray(coords)) {
             for (i = 0, len = coords.length; i < len; i++) {
-                marker = maplib.marker([coords[i][0] || 0, coords[i][1] || 0]);
+                marker = L.marker([coords[i][0] || 0, coords[i][1] || 0]);
                 markers.push(marker);
                 layerGroup.addLayer(marker);
             }
             
             console.log("markers after fill: ", me.markers.length, me.markers, me.markerLayerGroup);
         }
-        
-        
-        /*
-            1. how do I identify markers? by title?
-            2. create marker layer
-            3. fill layer with markers
-            easy
-            
-            1. update markers with an array of all (changed) places?
-            2. go through each marker and check if their counterpart has changed
-                - this is stupid because you iterate multiple times of it
-                - useless effort
-                - brute force: remove layer, create a new one?
-            
-        */
-        
-        // if ($.isArray(coords)) {
-            
-        //     for (;i < len; i++) {
-                
-        //     } 
-            
-        //     debugger;
-            
-        //     me.markers.push(maplib.marker([coords[0] || 0, coords[1] || 0]).addTo(me.map));
-            
-        //     me.map.addLayer();
-        // }
     }
     
     return me;
