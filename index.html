@@ -22,7 +22,7 @@
                 <button data-bind="click: filter">Filter</button>
                 <p>Results</p>
                 <ul data-bind="foreach: places">
-                    <li data-bind="text: name, style: { 'display': display }"></li>
+                    <li data-bind="click: $parent.select, text: name, style: { 'display': display }"></li>
                 </ul>
         </div>
         <div class="wrapper">

@@ -64,3 +64,31 @@ html, body {
    width: 100%;
    height: 100%;
 }
+
+.bounce {
+	-webkit-animation: 0.5s ease-in-out 0s jumping;
+	-moz-animation: 0.5s ease-in-out 0s jumping;
+	-ms-animation: 0.5s ease-in-out 0s jumping;
+	-o-animation: 0.5s ease-in-out 0s jumping;
+	animation: 0.5s ease-in-out 0s jumping;
+}
+
+@-webkit-keyframes jumping {
+	50% { top: -10px; }
+}
+
+@-moz-keyframes jumping {
+	50% { top: -10px; }
+}
+
+@-ms-keyframes jumping {
+	50% { top: -10px; }
+}
+
+@-o-keyframes jumping {
+	50% { top: -10px; }
+}
+
+@keyframes jumping {
+	50% { top: -10px; }
+}
