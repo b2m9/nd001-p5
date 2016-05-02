@@ -1,6 +1,6 @@
 var app = window.app || {};
 
-app.Map = (function ($, L) {
+app.Map = (function ($, L, db) {
     "use strict";
     
     // TODO: attribution
@@ -10,15 +10,15 @@ app.Map = (function ($, L) {
         origin: [0, 0],
         zoom: 2,
         tiles: "http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg",
-        markers: [],
         markerLayerGroup: L.layerGroup(),
         init: _init,
-        createMarker: _createMarker,
-        updateMarkers: _updateMarkers
+        createMarker: _createMarker
     };
     
     function _init () {
         var map = me.map;
+        
+        // TODO: max zoom?
         
         // create map pane
         map = L.map(me.id).setView(me.origin, me.zoom);
@@ -26,6 +26,7 @@ app.Map = (function ($, L) {
         L.tileLayer(me.tiles).addTo(map);
         // add layer group
         me.markerLayerGroup.addTo(map);
+        
         // add event listeners to remove marker animation
         $("#" + me.id).on("animationend", "img.leaflet-marker-icon", _animationEnd);
         $("#" + me.id).on("animationend", "img.leaflet-marker-shadow", _animationEnd);
@@ -35,8 +36,8 @@ app.Map = (function ($, L) {
         $(this).removeClass("bounce");
     }
     
-    function _createMarker (coords) {
-        var marker = L.marker([coords[0] || 0, coords[1] || 0]);
+    function _createMarker (title, wikiEntry, lat, lng) {
+        var marker = L.marker([lat || 0, lng || 0]);
         
         marker.on("click", function (ev) {
             var img = $(ev.target._icon);
@@ -44,36 +45,55 @@ app.Map = (function ($, L) {
             
             img.addClass("bounce");
             shadow.addClass("bounce");
-        });
+        }).bindPopup("<div class='popup'><h1>" + title + "</h1>" + "<p class='popupWiki'></p>" + "<p class='popupForecast'></p></div>");;
+        
+        _getMarkerPopup(marker, wikiEntry, title, lat ,lng);
         
         me.markerLayerGroup.addLayer(marker);
         return marker;
     }
     
-    function _updateMarkers (coords) {
-        var layerGroup = me.markerLayerGroup;
-        var markers = me.markers;
-        var marker = {};
-        var len = me.markers.length;
-        var i;
+    function _getMarkerPopup (marker, wikiEntry, title, lat, lng) {
         
-        // brute force: remove all markers and create new ones
-        for (i = len - 1; i >= 0; i--) {
-            layerGroup.removeLayer(markers.pop());
-        }
+        db.getWikipediaContent(wikiEntry).done(function (res, state) {
+            var html = $(marker.getPopup().getContent());
+            var page = {};
+            
+            if (state === "success" && res.query.pages) {
+                page = res.query.pages;
+            
+                html.find(".popupWiki").append("<p>" + page[Object.keys(page)[0]].extract + "<span class='attribution'>Provided by Wikipedia</span></p>");
+                
+                marker.getPopup().setContent(html.get(0).outerHTML);
+            }
+        }).fail(function (res, state) {
+            var html = $(marker.getPopup().getContent());
+            
+            html.find(".popupWiki").append("<p>Couldn't reach Wikipedia API.</p>");
+            
+            marker.getPopup().setContent(html.get(0).outerHTML);
+        });
         
-        console.log("markers after delete: ", me.markers.length, me.markers, me.markerLayerGroup);
-        
-        if ($.isArray(coords)) {
-            for (i = 0, len = coords.length; i < len; i++) {
-                marker = L.marker([coords[i][0] || 0, coords[i][1] || 0]);
-                markers.push(marker);
-                layerGroup.addLayer(marker);
+        db.getWeatherData(lat, lng).done(function (res, state) {
+            var html = $(marker.getPopup().getContent());
+            var temp = 0;
+            
+            if (state === "success" && res.currently) {
+                temp = parseFloat((res.currently.temperature - 32) / 1.8).toFixed(2);
+                
+                html.find(".popupForecast").append("<p>Current temperature: " + temp + "ºC<span class='attribution'>Provided by Forecast.io</span></p>");
+                
+                marker.getPopup().setContent(html.get(0).outerHTML);
             }
             
-            console.log("markers after fill: ", me.markers.length, me.markers, me.markerLayerGroup);
-        }
+        }).fail(function (res, state) {
+            var html = $(marker.getPopup().getContent());
+
+            html.find(".popupForecast").append("<p>Couldn't reach Forecast.io API.</p>");
+            
+            marker.getPopup().setContent(html.get(0).outerHTML);
+        });
     }
-    
+
     return me;
-}(jQuery, L));
+}(jQuery, L, app.DataLoader));

@@ -1,17 +1,51 @@
 [{
     "name": "Gili Air",
+    "wikiEntry": "Gili Islands",
     "coords": [-8.358920, 116.081096],
     "tags": ["Indonesia", "Island", "Beach", "Ocean", "Asia"]
 }, {
     "name": "Yushan",
+    "wikiEntry": "Yushan (mountain)",
     "coords": [23.469920, 120.957712],
     "tags": ["Jade Mountain", "Taiwan", "Island", "Mountain", "Trekking", "Hiking", "Asia"]
 }, {
     "name": "Auroville",
+    "wikiEntry": "Auroville",
     "coords": [12.004899, 79.811725],
     "tags": ["India", "Tamil Nadu", "Asia", "Town", "Spirituality", "Yoga", "Meditation"]
 }, {
-    "name": "Cap Le Grand",
+    "name": "Cape Le Grand",
+    "wikiEntry": "Cape Le Grand National Park",
     "coords": [-34.002967, 122.114987],
     "tags": ["Australia", "Western Australia", "National Park", "Beach", "Crystal Blue Water", "Ocean"]
+}, {
+    "name": "Tuolumne Meadows",
+    "wikiEntry": "Tuolumne Meadows",
+    "coords": [37.876874, -119.375941],
+    "tags": ["USA", "California", "North America", "National Park", "Mountains", "Yosemite"]
+}, {
+    "name": "Lake Myvatn",
+    "wikiEntry": "Mývatn",
+    "coords": [65.636640, -16.985774],
+    "tags": ["Iceland", "Europe", "Volcano", "Marathon", "Running", "Island"]
+}, {
+    "name": "North Cape",
+    "wikiEntry": "North Cape (Norway)",
+    "coords": [71.170899, 25.782512],
+    "tags": ["Norway", "Europe", "Arctic", "Midnight Sun", "Barents Sea", "Nordkapp"]
+}, {
+    "name": "Chefchaouen",
+    "wikiEntry": "Chefchaouen",
+    "coords": [35.168447, -5.269350],
+    "tags": ["Morocco", "Africa", "Xauen", "Rif mountains", "Blue and white"]
+}, {
+    "name": "Luarca",
+    "wikiEntry": "Luarca",
+    "coords": [43.545604, -6.533615],
+    "tags": ["Spain", "Europe", "Atlantic Ocean", "Fishery", "Sailing", "Boats"]
+}, {
+    "name": "Iles des Saintes",
+    "wikiEntry": "Îles des Saintes",
+    "coords": [15.855028, -61.628413],
+    "tags": ["French Antilles", "French West Indies", "France", "Island", "Caribbean", "Atlantic Ocean"]
 }]

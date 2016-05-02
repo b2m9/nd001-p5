@@ -1,6 +1,6 @@
 var app = window.app || {};
 
-app.DefaultViewModel = (function ($, ko, db, map) {
+app.DefaultViewModel = (function ($, ko, db) {
     "use strict";
     
     var me = {
@@ -12,20 +12,14 @@ app.DefaultViewModel = (function ($, ko, db, map) {
     };
     
     function _init () {
-        me.places.subscribe(function () {
-            console.log("places changed", arguments);
-        } );
-        
         db.getPlaces(function (data) {
             var arr = [];
-            var markers = [];
             
             data = data || [];
             data.forEach(function (d) {
-                // parse coords
                 var coords = [parseFloat(d.coords[0] || 0), parseFloat(d.coords[1] || 0)];
                 
-                arr.push(new app.Place(d.name, coords, d.tags));
+                arr.push(new app.Place(d.name, coords, d.tags, d.wikiEntry));
             });
             
             // populate only once to avoid Knockout triggering update
@@ -57,4 +51,4 @@ app.DefaultViewModel = (function ($, ko, db, map) {
     }
     
     return me;
-}(jQuery, ko, app.DataLoader, app.Map));
+}(jQuery, ko, app.DataLoader));

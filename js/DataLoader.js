@@ -4,7 +4,9 @@ app.DataLoader = (function ($, ko) {
     "use strict";
     
     var me = {
-        getPlaces : _getPlaces
+        getPlaces: _getPlaces,
+        getWikipediaContent: _getWikipediaContent,
+        getWeatherData: _getWeatherData
     };
     
     function _getPlaces (cb) {
@@ -14,6 +16,29 @@ app.DataLoader = (function ($, ko) {
                 cb(data);
             });
         }
+    }
+    
+    function _getWikipediaContent (name) {
+        var url = "https://en.wikipedia.org/w/api.php?callback=?";
+        var data = {
+            action: "query",
+            prop: "extracts",
+            format: "json",
+            exsentences: 1,
+            exintro: 1,
+            utf8: 1,
+            explaintext: 1,
+            titles: name
+        };
+        
+        return $.getJSON(url, data);
+    }
+    
+    function _getWeatherData (lat, lng) {
+        var apiKey = "d99127d210cbbbeca540cd3c46a37ec2";
+        var url = "https://api.forecast.io/forecast/";
+        
+        return $.getJSON(url + apiKey + "/" + lat + "," + lng + "?callback=?");
     }
     
     return me;

@@ -2,7 +2,7 @@ var app = window.app || {};
 
 app.Place = (function(ko, map) {
 
-    return function(name, coords, tags) {
+    return function(name, coords, tags, wikiEntry) {
         "use strict";
 
         this.name = ko.observable(name || "");
@@ -10,6 +10,7 @@ app.Place = (function(ko, map) {
         this.lng = ko.observable(coords[1] || 0);
         this.tags = ko.observable(tags || []);
         this.display = ko.observable("block");
-        this.marker = map.createMarker(coords);
+        this.wikiEntry = wikiEntry;
+        this.marker = map.createMarker(this.name(), this.wikiEntry, this.lat(), this.lng());
     };
 }(ko, app.Map));
