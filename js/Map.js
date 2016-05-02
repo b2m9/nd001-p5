@@ -3,7 +3,6 @@ var app = window.app || {};
 app.Map = (function ($, L, db) {
     "use strict";
     
-    // TODO: attribution
     var me = {
         map: {},
         id: "map-container",
@@ -18,12 +17,24 @@ app.Map = (function ($, L, db) {
     function _init () {
         var map = me.map;
         
-        // TODO: max zoom?
-        
         // create map pane
-        map = L.map(me.id).setView(me.origin, me.zoom);
+        map = L.map(me.id, {
+            center: me.origin,
+            zoom: me.zoom,
+            minZoom: 2,
+            maxZoom: 10,
+            zoomControl: false
+        });
+        
+        L.control.zoom({
+            position: "topright"
+        }).addTo(map);
+        
         // connect to tile server
-        L.tileLayer(me.tiles).addTo(map);
+        L.tileLayer(me.tiles, {
+            attribution: "Map data &copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors"
+        }).addTo(map);
+        
         // add layer group
         me.markerLayerGroup.addTo(map);
         
@@ -62,14 +73,14 @@ app.Map = (function ($, L, db) {
             if (state === "success" && res.query.pages) {
                 page = res.query.pages;
             
-                html.find(".popupWiki").append("<p>" + page[Object.keys(page)[0]].extract + "<span class='attribution'>Provided by Wikipedia</span></p>");
+                html.find(".popupWiki").html(page[Object.keys(page)[0]].extract + "<span class='attribution'>Provided by Wikipedia</span>");
                 
                 marker.getPopup().setContent(html.get(0).outerHTML);
             }
         }).fail(function (res, state) {
             var html = $(marker.getPopup().getContent());
             
-            html.find(".popupWiki").append("<p>Couldn't reach Wikipedia API.</p>");
+            html.find(".popupWiki").html("Couldn't reach Wikipedia API.");
             
             marker.getPopup().setContent(html.get(0).outerHTML);
         });
@@ -81,7 +92,7 @@ app.Map = (function ($, L, db) {
             if (state === "success" && res.currently) {
                 temp = parseFloat((res.currently.temperature - 32) / 1.8).toFixed(2);
                 
-                html.find(".popupForecast").append("<p>Current temperature: " + temp + "ºC<span class='attribution'>Provided by Forecast.io</span></p>");
+                html.find(".popupForecast").html("Current temperature: " + temp + "ºC<span class='attribution'>Provided by Forecast.io</span>");
                 
                 marker.getPopup().setContent(html.get(0).outerHTML);
             }
@@ -89,7 +100,7 @@ app.Map = (function ($, L, db) {
         }).fail(function (res, state) {
             var html = $(marker.getPopup().getContent());
 
-            html.find(".popupForecast").append("<p>Couldn't reach Forecast.io API.</p>");
+            html.find(".popupForecast").html("Couldn't reach Forecast.io API.");
             
             marker.getPopup().setContent(html.get(0).outerHTML);
         });

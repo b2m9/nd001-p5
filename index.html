@@ -2,33 +2,32 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <title>Clickbait: Top 10 Places You Should Visit Before You Die</title>
         <link rel="stylesheet" href="css/style.css" type="text/css" />
         <link rel="stylesheet" href="libs/leaflet/leaflet.css" type="text/css" />
+        <link rel="stylesheet" href="libs/bootstrap/bootstrap.css" type="text/css" />
         
-        
-        <script type="text/javascript" src="libs/leaflet/leaflet-src.js"></script>
-        <!--<script type="text/javascript" src="libs/leaflet/leaflet.js"></script>-->
-        <script type="text/javascript" src="libs/knockout/knockout-latest.debug.js"></script>
-        <!--<script type="text/javascript" src="libs/knockout/knockout-latest.js"></script>-->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-        <!--<script type="text/javascript" src="libs/jquery/jquery-custom.min.js"></script>-->
+        <script src="libs/leaflet/leaflet.js"></script>
+        <script src="libs/knockout/knockout-latest.js"></script>
+        <script src="libs/jquery/jquery.min.js"></script>
     </head>
     <body>
         <div id="sidebar" class="sidebar">
-                <input id="search" type="text" value="Type here">
-                <button data-bind="click: filter">Filter</button>
-                <p>Results</p>
-                <ul data-bind="foreach: places">
-                    <li data-bind="click: $parent.select, text: name, style: { 'display': display }"></li>
+                <input class="form-control" id="search" type="text" placeholder="Filter by tag">
+                <button class="btn btn-primary btn-block" data-bind="click: filter">Filter</button>
+                <h3>Results</h3>
+                <ul class="list-unstyled" data-bind="foreach: places">
+                    <li class="list-item" data-bind="click: $parent.select, text: name, style: { 'display': display }"></li>
                 </ul>
         </div>
         <div class="wrapper">
             <div class="navigation">
                 <div class="navigation--tagline">Your Next Holiday</div>
-                <div id="menu-toggle" class="navigation--menu" data-bind="click: toggle"><span>Menu</span></div>
+                <div id="menu-toggle" class="navigation--menu">
+                    <a class="btn btn-default" href="#" data-bind="click: toggle" role="button">Menu</a>
+                    </div>
             </div>
             <div id="map-container" class="map"></div>
         </div>
