@@ -4,10 +4,11 @@
   "description": "Udacity nd001: Project 5",
   "main": "index.js",
   "scripts": {
-    "copy": "npm run copy:bootstrap && npm run copy:leaflet && npm run copy:knockout",
+    "copy": "npm run copy:bootstrap && npm run copy:leaflet && npm run copy:knockout && npm run copy:jquery",
     "copy:bootstrap": "mkdir -p libs/bootstrap; mv -t libs/bootstrap node_modules/bootstrap/dist/css/bootstrap.*css",
     "copy:leaflet": "mkdir -p libs/leaflet;mv -t libs/leaflet node_modules/leaflet/dist/*",
     "copy:knockout": "mkdir -p libs/knockout; mv -t libs/knockout node_modules/knockout/build/output/knockout*",
+    "copy:jquery": "mkdir -p libs/jquery; mv -t libs/jquery node_modules/jquery/dist/jquery.min.js",
     "postinstall": "npm run copy"
   },
   "repository": {
@@ -22,8 +23,8 @@
   "homepage": "https://github.com/b2m9/nd001-p5#readme",
   "dependencies": {
     "bootstrap": "^3.3.6",
-    "http-server": "^0.9.0",
     "knockout": "^3.4.0",
-    "leaflet": "^0.7.7"
+    "leaflet": "^0.7.7",
+    "jquery": "^2.2.3"
   }
 }

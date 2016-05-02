@@ -1,5 +1,6 @@
 Map with 3rd party API integration.
 
+- run `npm install`
 - run from any server of your choice
 
 ### Attributions
