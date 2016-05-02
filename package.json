@@ -8,8 +8,7 @@
     "copy:bootstrap": "mkdir -p libs/bootstrap; mv -t libs/bootstrap node_modules/bootstrap/dist/css/bootstrap.*css",
     "copy:leaflet": "mkdir -p libs/leaflet;mv -t libs/leaflet node_modules/leaflet/dist/*",
     "copy:knockout": "mkdir -p libs/knockout; mv -t libs/knockout node_modules/knockout/build/output/knockout*",
-    "copy:jquery": "mkdir -p libs/jquery; mv -t libs/jquery node_modules/jquery/dist/jquery.min.js",
-    "postinstall": "npm run copy"
+    "copy:jquery": "mkdir -p libs/jquery; mv -t libs/jquery node_modules/jquery/dist/jquery.min.js"
   },
   "repository": {
     "type": "git",
