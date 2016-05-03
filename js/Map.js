@@ -3,6 +3,16 @@ var app = window.app || {};
 app.Map = (function($, gmaps, db) {
     "use strict";
 
+    /**
+     * Instance for handling map layer. Singleton.
+     * @member {object} map - Google Maps object
+     * @member {string} id - ID of DOM element
+     * @member {object} infoWindow - Popup
+     * @member {array} origin - Initial location of map
+     * @member {number} zoom - Initial zoom of map
+     * @method init - Initialises map and infoWindow
+     * @method createMarker - Creates and returns new marker
+     */
     var me = {
         map: {},
         id: "map-container",
@@ -28,73 +38,65 @@ app.Map = (function($, gmaps, db) {
                 lng: me.origin[1]
             }
         });
-        
+
+        // popup window
         me.infoWindow = new gmaps.InfoWindow({});
     }
 
-    function _createMarker (title, wikiEntry, lat, lng) {
+    function _createMarker(title, wikiEntry, lat, lng) {
         var marker = new gmaps.Marker({
             position: new gmaps.LatLng(lat, lng),
             map: me.map,
             title: title
         });
-        
-        // bounce animation
-        marker.addListener("click", function () {
+
+        marker.addListener("click", function() {
             // move map centre to marker position
-            me.map.setCenter({lat: lat, lng: lng});
-            
+            me.map.setCenter({
+                lat: lat,
+                lng: lng
+            });
+
             // change content of infoWindow
             _clearPopup();
             _setTitle(title);
-            _setInfoWindowContent(me.infoWindow, wikiEntry, lat ,lng);
-            
+            _setInfoWindowContent(me.infoWindow, wikiEntry, lat, lng);
+
             // finally open infoWindow
             me.infoWindow.open(me.map, marker);
-            
+
             // handle bounce animation of marker
             marker.setAnimation(gmaps.Animation.BOUNCE);
-            setTimeout(function () {
+            setTimeout(function() {
                 marker.setAnimation(null);
             }, 700);
         });
 
         return marker;
     }
-    
-    function _clearPopup () {
+
+    // reset content of popup
+    function _clearPopup() {
         me.infoWindow.setContent("<div class='popup'><h1></h1>" + "<p class='popupWiki'></p>" + "<p class='popupForecast'></p></div>");
     }
-    
-    function _setTitle (title) {
+
+    // set title in content of popup
+    function _setTitle(title) {
         var html = $(me.infoWindow.getContent())
             .find("h1").html(title).parent().get(0).outerHTML;
-            
-        me.infoWindow.setContent(html);
-    }
-    
-    function _setWikiContent (str) {
-        var html = $(me.infoWindow.getContent())
-            .find(".popupWiki").html(str).parent().get(0).outerHTML;
-            
-        me.infoWindow.setContent(html);
-    }
-    
-    function _setWeatherContent (str) {
-        var html = $(me.infoWindow.getContent())
-            .find(".popupForecast").html(str).parent().get(0).outerHTML;
-            
+
         me.infoWindow.setContent(html);
     }
 
-    function _setInfoWindowContent (popup, wikiEntry, lat, lng) {
+    // async request to retrieve Wikipedia and Forecast.io content
+    function _setInfoWindowContent(popup, wikiEntry, lat, lng) {
         // handle Wikipedia content
         db.getWikipediaContent(wikiEntry).done(function(res, state) {
             var page = {};
 
             if (state === "success" && res.query.pages) {
                 page = res.query.pages;
-                
+
                 _setWikiContent(page[Object.keys(page)[0]].extract + "<span class='attribution'>Provided by Wikipedia</span>");
             }
         }).fail(function(res, state) {
@@ -102,7 +104,7 @@ app.Map = (function($, gmaps, db) {
         });
 
         // handle weather content
-        db.getWeatherData(lat, lng).done(function (res, state) {
+        db.getWeatherData(lat, lng).done(function(res, state) {
             var temp = 0;
 
             if (state === "success" && res.currently) {
@@ -111,9 +113,25 @@ app.Map = (function($, gmaps, db) {
                 _setWeatherContent("Current temperature: " + temp + "ºC<span class='attribution'>Provided by Forecast.io</span>");
             }
 
-        }).fail(function (res, state) {
+        }).fail(function(res, state) {
             _setWeatherContent("Couldn't reach Forecast.io API.");
         });
+    }
+
+    // set wiki paragraph in content of popup
+    function _setWikiContent(str) {
+        var html = $(me.infoWindow.getContent())
+            .find(".popupWiki").html(str).parent().get(0).outerHTML;
+
+        me.infoWindow.setContent(html);
+    }
+
+    // set temperature in content of popup
+    function _setWeatherContent(str) {
+        var html = $(me.infoWindow.getContent())
+            .find(".popupForecast").html(str).parent().get(0).outerHTML;
+
+        me.infoWindow.setContent(html);
     }
 
     return me;

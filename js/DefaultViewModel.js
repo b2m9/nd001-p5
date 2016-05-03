@@ -1,8 +1,17 @@
 var app = window.app || {};
 
-app.DefaultViewModel = (function ($, ko, db, Place, gmaps) {
+app.DefaultViewModel = (function ($, ko, db, Place, gmaps, map) {
     "use strict";
     
+    /**
+     * Instance of DefaultViewModel. Singleton.
+     * @member {object} places - Array of Places. ko.observableArray()
+     * @member {object} filterStr - String to filter places. ko.observable()
+     * @method init - Initialise ViewModel
+     * @method toggle - Toggle sidebar.
+     * @method filter - Filter places based on filterStr
+     * @method select - Trigger respective marker on map
+     */
     var me = {
         places: ko.observableArray([]),
         filterStr: ko.observable(""),
@@ -13,6 +22,7 @@ app.DefaultViewModel = (function ($, ko, db, Place, gmaps) {
     };
     
     function _init () {
+        // load pre-defined list of locations
         db.getPlaces(function (data) {
             var arr = [];
             
@@ -36,8 +46,12 @@ app.DefaultViewModel = (function ($, ko, db, Place, gmaps) {
         var s = me.filterStr().trim();
         var re = new RegExp(s, "gi");
         
+        // close all open infoWindows
+        map.infoWindow.close();
+        
+        // filter locations based on RegEx
         ko.utils.arrayForEach(me.places(), function (place, i) {
-            if (place.tags().join().concat(place.name()).search(re) > -1) {
+            if (place.tags.join().concat(place.name).search(re) > -1) {
                 place.display("block");
                 place.marker.setOpacity(1);
             } else {
@@ -52,4 +66,4 @@ app.DefaultViewModel = (function ($, ko, db, Place, gmaps) {
     }
     
     return me;
-}(jQuery, ko, app.DataLoader, app.Place, google.maps));
+}(jQuery, ko, app.DataLoader, app.Place, google.maps, app.Map));

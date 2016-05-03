@@ -1,47 +1,58 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <title>Clickbait: Top 10 Places You Should Visit Before You Die</title>
-        <link rel="stylesheet" href="css/style.css" type="text/css" />
-        <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css" type="text/css" />
-        
-        <script src="node_modules/knockout/build/output/knockout-latest.js"></script>
-        <script src="node_modules/jquery/dist/jquery.min.js"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDArzPYiwUx3P7LbVwyHWyNSKxehNEjZTw"></script>
-    </head>
-    <body>
-        <div id="sidebar" class="sidebar">
-                <input class="form-control" id="search" data-bind="value: filterStr" type="text" placeholder="Filter by tag">
-                <button class="btn btn-primary btn-block" data-bind="click: filter">Filter</button>
-                <h3>Results</h3>
-                <ul class="list-unstyled" data-bind="foreach: places">
-                    <li class="list-item" data-bind="click: $parent.select, text: name, style: { 'display': display }"></li>
-                </ul>
-        </div>
-        <div class="wrapper">
-            <div class="navigation">
-                <div class="navigation--tagline">Your Next Holiday</div>
-                <div id="menu-toggle" class="navigation--menu">
-                    <a class="btn btn-default" href="#" data-bind="click: toggle" role="button">Menu</a>
-                    </div>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title>Clickbait: Top 10 Places You Should Visit Before You Die</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css" type="text/css" />
+
+    <script src="node_modules/knockout/build/output/knockout-latest.js"></script>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+
+</head>
+<body>
+    <div id="sidebar" class="sidebar">
+        <input class="form-control" id="search" data-bind="value: filterStr" type="text" placeholder="Filter by tag">
+        <button class="btn btn-primary btn-block" data-bind="click: filter">Filter</button>
+        <h3>Results</h3>
+        <ul class="list-unstyled" data-bind="foreach: places">
+            <li class="list-item" data-bind="click: $parent.select, text: name, style: { 'display': display }"></li>
+        </ul>
+    </div>
+    <div class="wrapper">
+        <div class="navigation">
+            <div class="navigation--tagline">Your Next Holiday</div>
+            <div id="menu-toggle" class="navigation--menu">
+                <a class="btn btn-default" href="#" data-bind="click: toggle" role="button">Menu</a>
             </div>
-            <div id="map-container" class="map"></div>
         </div>
-        
-        <!-- TODO: add proper loading, beware of dependencies! -->
-        <script type="text/javascript" src="js/DataLoader.js"></script>
-        <script type="text/javascript" src="js/Map.js"></script>
-        <script type="text/javascript" src="js/Place.js"></script>
-        <script type="text/javascript" src="js/DefaultViewModel.js"></script>
-        <script>
-            jQuery(document).ready(function () {
+        <div id="map-container" class="map"></div>
+    </div>
+
+    
+    <script>
+        // TODO: add proper loading, beware of dependencies
+        function loadApp() {
+            var dl = jQuery.ajax("js/DataLoader.js");
+            var map = dl.pipe(function() {
+                return jQuery.ajax("js/Map.js");
+            });
+            var place = map.pipe(function() {
                 app.Map.init();
+                return jQuery.ajax("js/Place.js");
+            });
+            var viewModel = place.pipe(function() {
+                return jQuery.ajax("js/DefaultViewModel.js");
+            })
+
+            viewModel.done(function() {
                 app.DefaultViewModel.init();
                 ko.applyBindings(app.DefaultViewModel);
             });
-        </script>
-    </body>
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDArzPYiwUx3P7LbVwyHWyNSKxehNEjZTw&callback=loadApp" async defer></script>
+</body>
 </html>
