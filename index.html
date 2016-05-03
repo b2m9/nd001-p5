@@ -6,16 +6,15 @@
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <title>Clickbait: Top 10 Places You Should Visit Before You Die</title>
         <link rel="stylesheet" href="css/style.css" type="text/css" />
-        <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" type="text/css" />
         <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css" type="text/css" />
         
-        <script src="node_modules/leaflet/dist/leaflet.js"></script>
         <script src="node_modules/knockout/build/output/knockout-latest.js"></script>
         <script src="node_modules/jquery/dist/jquery.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDArzPYiwUx3P7LbVwyHWyNSKxehNEjZTw"></script>
     </head>
     <body>
         <div id="sidebar" class="sidebar">
-                <input class="form-control" id="search" type="text" placeholder="Filter by tag">
+                <input class="form-control" id="search" data-bind="value: filterStr" type="text" placeholder="Filter by tag">
                 <button class="btn btn-primary btn-block" data-bind="click: filter">Filter</button>
                 <h3>Results</h3>
                 <ul class="list-unstyled" data-bind="foreach: places">
@@ -35,7 +34,7 @@
         <!-- TODO: add proper loading, beware of dependencies! -->
         <script type="text/javascript" src="js/DataLoader.js"></script>
         <script type="text/javascript" src="js/Map.js"></script>
-        <script type="text/javascript" src="js/Place.js"></script>4
+        <script type="text/javascript" src="js/Place.js"></script>
         <script type="text/javascript" src="js/DefaultViewModel.js"></script>
         <script>
             jQuery(document).ready(function () {

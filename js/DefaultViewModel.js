@@ -1,10 +1,11 @@
 var app = window.app || {};
 
-app.DefaultViewModel = (function ($, ko, db) {
+app.DefaultViewModel = (function ($, ko, db, Place, gmaps) {
     "use strict";
     
     var me = {
         places: ko.observableArray([]),
+        filterStr: ko.observable(""),
         init: _init,
         toggle: _toggle,
         filter: _filter,
@@ -19,7 +20,7 @@ app.DefaultViewModel = (function ($, ko, db) {
             data.forEach(function (d) {
                 var coords = [parseFloat(d.coords[0] || 0), parseFloat(d.coords[1] || 0)];
                 
-                arr.push(new app.Place(d.name, coords, d.tags, d.wikiEntry));
+                arr.push(new Place(d.name, coords, d.tags, d.wikiEntry));
             });
             
             // populate only once to avoid Knockout triggering update
@@ -32,7 +33,7 @@ app.DefaultViewModel = (function ($, ko, db) {
     }
     
     function _filter () {
-        var s = $("#search").val().trim();
+        var s = me.filterStr().trim();
         var re = new RegExp(s, "gi");
         
         ko.utils.arrayForEach(me.places(), function (place, i) {
@@ -47,8 +48,8 @@ app.DefaultViewModel = (function ($, ko, db) {
     }
     
     function _select (el) {
-        this.marker.fireEvent("click");
+        new gmaps.event.trigger(this.marker, "click");
     }
     
     return me;
-}(jQuery, ko, app.DataLoader));
+}(jQuery, ko, app.DataLoader, app.Place, google.maps));

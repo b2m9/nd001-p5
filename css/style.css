@@ -70,12 +70,8 @@ html, body {
    height: 100%;
 }
 
-.bounce {
-	-webkit-animation: 0.5s ease-in-out 0s jumping;
-	-moz-animation: 0.5s ease-in-out 0s jumping;
-	-ms-animation: 0.5s ease-in-out 0s jumping;
-	-o-animation: 0.5s ease-in-out 0s jumping;
-	animation: 0.5s ease-in-out 0s jumping;
+.popup {
+    max-width: 250px;
 }
 
 .popup > h1 {
@@ -85,24 +81,4 @@ html, body {
 .attribution {
     display: block;
     font-style: italic;
-}
-
-@-webkit-keyframes jumping {
-	50% { top: -10px; }
-}
-
-@-moz-keyframes jumping {
-	50% { top: -10px; }
-}
-
-@-ms-keyframes jumping {
-	50% { top: -10px; }
-}
-
-@-o-keyframes jumping {
-	50% { top: -10px; }
-}
-
-@keyframes jumping {
-	50% { top: -10px; }
 }
