@@ -52,7 +52,11 @@
                 ko.applyBindings(app.DefaultViewModel);
             });
         }
+        
+        function loadingFailed() {
+            alert("Oh snap, something is broken! We're sorry, try again later.");
+        }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDArzPYiwUx3P7LbVwyHWyNSKxehNEjZTw&callback=loadApp" async defer></script>
+    <script src="https://maps.gooogleapis.com/maps/api/js?key=AIzaSyDArzPYiwUx3P7LbVwyHWyNSKxehNEjZTw&callback=loadApp" onerror="loadingFailed()" async defer></script>
 </body>
 </html>
